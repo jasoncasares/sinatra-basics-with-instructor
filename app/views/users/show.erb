@@ -1,0 +1,4 @@
+<p> Your posts, <%= @user.username %></p>
+<% @user.posts.each do |post| %>
+    <li><%= post.content %></li>
+<% end %>

@@ -1,1 +1,1 @@
-User Sign In and Sign Out App. Users Can make a Post
+Sinatra Basics with Instructor
