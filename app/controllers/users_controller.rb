@@ -15,13 +15,17 @@ class UsersController < ApplicationController
   end
 
   post '/signup' do
-    if params[:username] == "" || params[:email] == "" || params[:password] == ""
-      redirect to '/signup'
+    if logged_in?
+        if params[:username] == "" || params[:email] == "" || params[:password] == ""
+          redirect to '/signup'
+        else
+          @user = User.new(username: params[:username], email: params[:email], password: params[:password])
+          @user.save
+          session[:user_id] = @user.id
+          redirect to '/posts'
+        end
     else
-      @user = User.new(username: params[:username], email: params[:email], password: params[:password])
-      @user.save
-      session[:user_id] = @user.id
-      redirect to '/posts'
+        redirect to '/posts'
     end
   end
 
@@ -35,14 +39,16 @@ class UsersController < ApplicationController
 
 
   post '/login' do
-    user = User.find_by(username: params[:username])
-    if user && user.authenticate(params[:password])
-      binding.pry
-      session[:user_id] = user.id
-      binding.pry
-      redirect to "/posts"
+    if !logged_in?
+        user = User.find_by(username: params[:username])
+        if user && user.authenticate(params[:password])
+          session[:user_id] = user.id
+          redirect to "/posts"
+        else
+          redirect to '/login'
+        end
     else
-      redirect to '/login'
+        redirect to '/posts'
     end
   end
 
