@@ -1,3 +1,4 @@
+require 'pry'
 class UsersController < ApplicationController
 
   get '/users/:slug' do
@@ -32,13 +33,16 @@ class UsersController < ApplicationController
     end
   end
 
+
   post '/login' do
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
+      binding.pry
       session[:user_id] = user.id
+      binding.pry
       redirect to "/posts"
     else
-      redirect to '/signup'
+      redirect to '/login'
     end
   end
 

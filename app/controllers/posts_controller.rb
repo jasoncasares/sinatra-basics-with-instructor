@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
 
   get '/posts' do
+    binding.pry
     if logged_in?
       @posts = Post.all
       erb :'/posts/posts'
